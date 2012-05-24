@@ -16,4 +16,6 @@ Gem::Specification.new do |gem|
   gem.version       = Ans::Generator::VERSION
 
   gem.add_development_dependency "ans-releaser"
+
+  gem.add_runtime_dependency "ans-model-helpers"
 end
