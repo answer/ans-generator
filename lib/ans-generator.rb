@@ -1,7 +1,7 @@
 require "ans-generator/version"
+require "ans-generator/railtie"
 
 module Ans
   module Generator
-    # Your code goes here...
   end
 end
