@@ -13,15 +13,25 @@ require 'spec_helper'
 describe <%= class_name %>, "db" do
   # 存在するカラムを列挙する
   #it{should have_db_column(:column)}
-
 <% for attribute in attributes -%>
-  it{should have_db_column(:<%= attribute.name %>)}
+  it{should have_db_column(:<%= (case attribute.type
+when :belongs_to,:resources then "#{attribute.name}_id"
+else
+  attribute.name
+end) %>)}
 <% end -%>
 
   # 存在するインデックスを列挙する
   #it{should have_db_index(:column)}
   #it{should have_db_index([:column, :column2])}
   #it{should have_db_index(:column).uniq(true)}
+<% for attribute in attributes -%>
+<% if values = (case attribute.type
+  when :belongs_to,:resources then true
+end) -%>
+  it{should have_db_index(:<%= attribute.name %>_id)}
+<% end -%>
+<% end -%>
 end
 
 describe <%= class_name %>, "mass_assignments" do
@@ -29,9 +39,14 @@ describe <%= class_name %>, "mass_assignments" do
   #it{should allow_mass_assignment_of(:column)}           # できる
   #it{should_not allow_mass_assignment_of(:column)}       # できない
   #it{should allow_mass_assignment_of(:column).as(:role)} # as: role ならできる
-
 <% for attribute in attributes -%>
+<% if (case attribute.type
+when :belongs_to,:resources then false
+else
+  true
+end) -%>
   it{should allow_mass_assignment_of(:<%= attribute.name %>)}
+<% end -%>
 <% end -%>
 end
 
@@ -44,20 +59,21 @@ describe <%= class_name %>, "associations" do
 end
 
 describe <%= class_name %>, "invalid values" do
-  subject{<%= class_name %>.new <%= fixture_create %>.attributes_for(:<%= plural_name.singularize %>)}
+  #subject{<%= class_name %>.new <%= fixture_create %>.attributes_for(:<%= plural_name.singularize %>)}
 
   # データベースに保存できない値を渡す
   #it{should_not success_persistance_of(:name).values(["a"*256])}  # varchar(255)
   #it{should_not success_persistance_of(:name).values([10**10])}   # int(9)
   #it{should_not success_persistance_of(:name).values([nil])}      # not null カラム
   #it{should_not success_persistance_of(:name).values(["a", "a"])} # unique カラム
-
 <% for attribute in attributes -%>
-<% if values = (case attribute.type
-  when :integer then '10**10'
-  when :string  then '"a"*256'
+<% name, values = (case attribute.type
+  when :integer then [nil, '10**10']
+  when :belongs_to,:resources then ["#{attribute.name}_id", '10**10']
+  when :string then [nil, '"a"*256']
 end) -%>
-  it{should_not success_persistance_of(:<%= attribute.name %>).values([<%= values %>])}
+<% if values -%>
+  it{should_not success_persistance_of(:<%= name || attribute.name %>).values([<%= values %>])}
 <% end -%>
 <% end -%>
 end
