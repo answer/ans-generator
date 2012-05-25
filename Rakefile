@@ -7,7 +7,7 @@ class ReleaseTask
     "gem.ans-web.co.jp"
   end
   def gem_root
-    "/var/www/gems/public"
+    "/var/www/gem/public"
   end
 end
 
