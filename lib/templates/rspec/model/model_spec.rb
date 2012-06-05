@@ -1,9 +1,9 @@
 <%
-fixture_create = case
+fixture = case
   when defined? Fabricate
-    "Fabricate"
+    "Fabricate.attributes_for"
   when defined? FactoryGirl
-    "FactoryGirl"
+    "FactoryGirl.attributes_for"
 end
 -%>
 # -*- coding: utf-8 -*-
@@ -59,7 +59,7 @@ describe <%= class_name %>, "associations" do
 end
 
 describe <%= class_name %>, "invalid values" do
-  #subject{<%= class_name %>.new <%= fixture_create %>.attributes_for(:<%= plural_name.singularize %>)}
+  #subject{<%= class_name %>.new <%= fixture %>(:<%= plural_name.singularize %>)}
 
   # データベースに保存できない値を渡す
   #it{should_not success_persistance_of(:name).values(["a"*256])}  # varchar(255)
@@ -87,3 +87,20 @@ describe <%= class_name %>, "scope" do
 #__SQL
 
 end
+
+#describe <%= class_name %>, "METHOD" do
+#  subject{item.METHOD}
+#  let(:item){<%= class_name %>.create <%= fixture %>(:<%= plural_name.singularize %>,
+#    COLUMN: value,
+#  )}
+#  let(:value){nil}
+#
+#  context "COLUMN が value の場合" do
+#    let(:value){"value"}
+#    it{should == "METHOD VALUE"}
+#  end
+#  context "COLUMN が nil の場合" do
+#    it{should == "METHOD"}
+#  end
+#
+#end
