@@ -61,11 +61,11 @@ examples
       context "タイトルが存在しない場合" do
         context "本文が長く存在する場合" do
           let(:body){"長ーい本文"}
-          it{should == "タイトル: 長ーい本..."}
+          it{should == "長ーい本..."}
         end
         context "本文が短く存在する場合" do
           let(:body){"短い本文"}
-          it{should == "タイトル: 短い本文"}
+          it{should == "短い本文"}
         end
         context "本文が存在しない場合" do
           it{should == ""}
