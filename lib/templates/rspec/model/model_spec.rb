@@ -56,6 +56,13 @@ describe <%= class_name %>, "associations" do
   #it{should have_many(:children)}
   #it{should have_many(:children).through(:relation)}
   #it{should have_one(:partner)}
+<% for attribute in attributes -%>
+<% if values = (case attribute.type
+  when :belongs_to,:resources then true
+end) -%>
+  it{should belong_to(:<%= attribute.name %>)}
+<% end -%>
+<% end -%>
 end
 
 describe <%= class_name %>, "invalid values" do
