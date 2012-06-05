@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["sakai@ans-web.co.jp"]
   gem.description   = %q{rails3 用 view, rspec, feature の雛形を追加する}
   gem.summary       = %q{view, rspec, feature テンプレートの追加、差し替え}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/answer/ans-generator"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
