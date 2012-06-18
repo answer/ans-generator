@@ -15,6 +15,6 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Ans::Generator::VERSION
 
-  gem.add_development_dependency "shoulda-matchers"
-  gem.add_development_dependency "ans-matchers"
+  gem.add_runtime_dependency "shoulda-matchers"
+  gem.add_runtime_dependency "ans-matchers"
 end
