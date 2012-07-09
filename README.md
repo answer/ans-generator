@@ -4,11 +4,25 @@ ans-generator
 rails3 用 view, rspec, feature の雛形を追加する
 
 
+controller
+----------
+
+* controller(scaffold)
+
+
 view
 ----
 
-* 鋭意作成中
+twitter bootstrap の雛形を拡張する
 
+今のところ、 fluid レイアウト限定
+
+* `_form.html.erb`
+* `simple_form/_form.html.erb`
+* `edit.html.erb`
+* `index.html.erb`
+* `new.html.erb`
+* `show.html.erb`
 
 rspec
 -----
@@ -16,7 +30,9 @@ rspec
 以下のテンプレートを置き換える
 
 * model
-* and more...(鋭意作成中)
+* view
+* controller(scaffold)
+* helper
 
 
 feature
