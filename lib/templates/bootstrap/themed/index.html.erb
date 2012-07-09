@@ -1,0 +1,70 @@
+<%-
+  components = @controller_class_path.map{|m| ":#{m.underscore}"}.join(",").tap{|p| p << ", " if p.present?}
+-%>
+<%%- model_class = <%= resource_name.classify %>.new.class -%>
+<%%- link_action = t(".link_action", default: "edit") -%>
+<div class="page-header">
+  <div class="row-fluid">
+    <div class="span11">
+      <h1><%%=t ".title", default: model_class.model_name.human %></h1>
+    </div>
+    <div class="span1">
+      <div style="text-align: right;">
+        <%%= link_to t(".new", default: t("helpers.links.new")),
+                      [:new, <%= components %>:<%= resource_name %>],
+                      class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<%%= form_for @<%= plural_resource_name %>_search, url: [<%= components %>:<%= plural_resource_name %>], method: :get, html: { class: "well form-search" } do |f| %>
+  <%%= f.text_field :id_eq, placeholder: model_class.human_attribute_name(:id), class: "input-medium" %>
+  <%- columns.each do |column| -%>
+  <%- if column.type != :text -%>
+  <%%= f.text_field :<%= column.name %>_<%= ([:string, :text].include? column.type) ? "like" : "eq" %>, placeholder: model_class.human_attribute_name(:<%= column.name %>), class: "input-medium" %>
+  <%- end -%>
+  <%- end -%>
+  <%%= f.text_field :created_at_gte, placeholder: model_class.human_attribute_name(:created_at), class: "input-medium datetimepicker" %>
+  ～
+  <%%= f.text_field :created_at_lte, placeholder: model_class.human_attribute_name(:created_at), class: "input-medium datetimepicker" %>
+  <%%= f.submit t(".search", default: t("helpers.submit.search")) %>
+<%% end %>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%%= sort_link @<%= plural_resource_name %>_search, :id, model_class.human_attribute_name(:id), default_order: :desc %></th>
+      <%- columns.each do |column| -%>
+      <%- if !(column.name =~ /_id$/) && column.type != :text -%>
+      <th><%%= sort_link @<%= plural_resource_name %>_search, :<%= column.name %>, model_class.human_attribute_name(:<%= column.name %>) %></th>
+      <%- else -%>
+      <th><%%= model_class.human_attribute_name(:<%= column.name %>) %></th>
+      <%- end -%>
+      <%- end -%>
+      <th><%%= sort_link @<%= plural_resource_name %>_search, :created_at, model_class.human_attribute_name(:created_at), default_order: :desc %></th>
+      <%% if can? link_action, model_class %>
+        <th><%%=t ".actions", default: t("helpers.actions") %></th>
+      <%% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <%% @<%= plural_resource_name %>.each do |<%= resource_name %>| %>
+      <tr>
+        <td><%%= <%= resource_name %>.id %></td>
+        <%- columns.each do |column| -%>
+        <td><%%= <%= resource_name %>.<%= column.name %> %></td>
+        <%- end -%>
+        <td><%%=l_short <%= resource_name %>.created_at %></td>
+        <td>
+          <%%= link_to_if can?(link_action, <%= resource_name %>), t(".#{link_action}", default: t("helpers.links.#{link_action}")),
+                         [(link_action == "show" ? nil : link_action), <%= components %><%= resource_name %>], class: "btn btn-mini" %>
+        </td>
+      </tr>
+    <%% end %>
+  </tbody>
+</table>
+<div class="pagination pagination-centered">
+  <%%= paginate @<%= plural_resource_name %>, theme: "manage" %>
+</div>
