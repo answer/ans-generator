@@ -27,8 +27,8 @@ describe "<%= controller_file_path %>/show.html.<%= options[:template_engine] %>
     rendered
   }
   before do
-    # TODO ここでログインの処理を記述する
-    #login
+    # ここでログインの処理を記述する
+    <%= controller_class_path.map{|m| m.underscore}.join("_").tap{|p| p << "_" if p.present?} %>login
 
     assign :<%= singular_instance_name %>, <%= model_name %>.find(<%= fixture %>(:<%= singular_instance_name %><%= output_attributes.empty? ? ').id)' : ',' %>
 <% output_attributes.each_with_index do |attribute, attribute_index| -%>

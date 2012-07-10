@@ -22,8 +22,8 @@ require 'spec_helper'
 
 describe <%= controller_class_name %>Controller do
   before do
-    # TODO ここでログインの処理を記述する
-    #<%= controller_class_path.map{|m| m.underscore}.join("_").tap{|p| p << "_" if p.present?} %>login
+    # ここでログインの処理を記述する
+    <%= controller_class_path.map{|m| m.underscore}.join("_").tap{|p| p << "_" if p.present?} %>login
   end
 
   let(:valid_params){{
