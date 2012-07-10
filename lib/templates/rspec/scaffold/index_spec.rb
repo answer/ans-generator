@@ -20,8 +20,8 @@ describe "<%= controller_file_path %>/index.html.<%= options[:template_engine] %
     rendered
   }
   before do
-    # TODO ここでログインの処理を記述する
-    #login
+    # ここでログインの処理を記述する
+    <%= controller_class_path.map{|m| m.underscore}.join("_").tap{|p| p << "_" if p.present?} %>login
 
     assign :<%= plural_instance_name %>_search, <%= model_name %>.search
     assign :<%= plural_instance_name %>, <%= model_name %>.page

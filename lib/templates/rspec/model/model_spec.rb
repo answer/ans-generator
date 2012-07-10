@@ -88,26 +88,54 @@ end
 describe <%= class_name %>, "scope" do
   subject{<%= class_name %>}
 
-#  it{should have_executable_scope(:scope).by_sql(<<__SQL)}
+#  it{should have_executable_scope(:scope).by_sql(<<-__SQL)}
 #    SELECT `<%= plural_name %>`.* FROM `<%= plural_name %>`
 #    WHERE `<%= plural_name %>`.`number` = 'value'
-#__SQL
+#  __SQL
 
 end
 
-#describe <%= class_name %>, "METHOD" do
-#  subject{item.METHOD}
+#describe <%= class_name %>, "summary" do
+#  subject{item.summary}
 #  let(:item){<%= class_name %>.create <%= fixture %>(:<%= plural_name.singularize %>,
-#    COLUMN: value,
+#    title: title,
+#    body: body,
 #  )}
-#  let(:value){nil}
 #
-#  context "COLUMN が value の場合" do
-#    let(:value){"value"}
-#    it{should == "METHOD VALUE"}
+#  context "title が文字列の場合" do
+#    let(:title){"題名"}
+#
+#    context "body が長い文字列の場合" do
+#      let(:body){"長い長い文字列"}
+#      it{should == "題名: 長い長い文..."}
+#    end
+#    context "body が短い文字列の場合" do
+#      let(:body){"短い文字列"}
+#      it{should == "題名: 短い文字列"}
+#    end
+#    context "body が nil の場合" do
+#      let(:body){nil}
+#      it{should == "題名"}
+#    end
+#
 #  end
-#  context "COLUMN が nil の場合" do
-#    it{should == "METHOD"}
+#
+#  context "title が nil の場合" do
+#    let(:title){nil}
+#
+#    context "body が長い文字列の場合" do
+#      let(:body){"長い長い文字列"}
+#      it{should == "長い長い文..."}
+#    end
+#    context "body が短い文字列の場合" do
+#      let(:body){"短い文字列"}
+#      it{should == "短い文字列"}
+#    end
+#    context "body が nil の場合" do
+#      let(:body){nil}
+#      it{should == ""}
+#    end
+#
 #  end
 #
 #end
