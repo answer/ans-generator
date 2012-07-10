@@ -43,7 +43,7 @@ describe <%= class_name %>, "mass_assignments" do
 <% if (case attribute.type
 when :belongs_to,:resources then false
 else
-  !([:deleted_at].include? attribute.name)
+  !([:deleted_at].include? attribute.name.to_sym)
 end) -%>
   it{should allow_mass_assignment_of(:<%= attribute.name %>)}
 <% end -%>
