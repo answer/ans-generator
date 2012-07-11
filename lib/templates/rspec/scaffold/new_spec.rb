@@ -3,7 +3,7 @@
     when defined? Fabricate
       "Fabricate.attributes_for"
     when defined? FactoryGirl
-      "FactoryGirl.attributes_for"
+      "FactoryGirl.build"
   end
 
   model_name = class_name
@@ -30,11 +30,19 @@ describe "<%= controller_file_path %>/new.html.<%= options[:template_engine] %>"
     # ここでログインの処理を記述する
     <%= controller_class_path.map{|m| m.underscore}.join("_").tap{|p| p << "_" if p.present?} %>login
 
+<% if fixture == "Fabricate" -%>
     assign :<%= singular_instance_name %>, <%= model_name %>.new(<%= fixture %>(:<%= singular_instance_name %><%= output_attributes.empty? ? '))' : ',' %>
 <% output_attributes.each_with_index do |attribute, attribute_index| -%>
       :<%= attribute.name %> => <%= attribute.default.inspect %><%= attribute_index == output_attributes.length - 1 ? '' : ','%>
 <% end -%>
 <%= output_attributes.empty? ? "" : "    ))\n" -%>
+<% else -%>
+    assign :<%= singular_instance_name %>, <%= fixture %>(:<%= singular_instance_name %><%= output_attributes.empty? ? ')' : ',' %>
+<% output_attributes.each_with_index do |attribute, attribute_index| -%>
+      :<%= attribute.name %> => <%= attribute.default.inspect %><%= attribute_index == output_attributes.length - 1 ? '' : ','%>
+<% end -%>
+<%= output_attributes.empty? ? "" : "    )\n" -%>
+<% end -%>
   end
   it{should be_present}
 end
