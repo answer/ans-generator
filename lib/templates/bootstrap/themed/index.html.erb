@@ -2,6 +2,16 @@
   components = @controller_class_path.map{|m| ":#{m.underscore}"}.join(",").tap{|p| p << ", " if p.present?}
 -%>
 <%%- model_class = <%= resource_name.classify %>.new.class -%>
+<%%- model_headers = Hash[[
+  # ヘッダの出力に使用する文字列をここで用意する
+  :id,
+  <%- columns.each do |column| -%>
+  <%- unless column.name.to_sym == :deleted_at -%>
+  :<%= column.name %>,
+  <%- end -%>
+  <%- end -%>
+  :created_at,
+].map{|name| [name,model_class.human_attribute_name(name)]}] -%>
 <%%- link_action = t(".link_action", default: "edit") -%>
 <div class="page-header">
   <div class="row-fluid">
@@ -19,31 +29,37 @@
 
 </div>
 
-<%%= form_for @<%= plural_resource_name %>_search, url: [<%= components %>:<%= plural_resource_name %>], method: :get, html: { class: "well form-search" } do |f| %>
-  <%%= f.text_field :id_eq, placeholder: model_class.human_attribute_name(:id), class: "input-medium" %>
+<%%= form_for @<%= plural_resource_name %>_search, url: [<%= components %>:<%= plural_resource_name %>], method: :get, html: { class: "well form-search form-inline" } do |f| %>
+  <div class="search-controls">
+    <%%= f.text_field :id_eq, placeholder: model_headers[:id], class: "input-small", title: model_headers[:id] %>
+  </div>
   <%- columns.each do |column| -%>
   <%- if column.type != :text -%>
-  <%%= f.text_field :<%= column.name %>_<%= ([:string, :text].include? column.type) ? "like" : "eq" %>, placeholder: model_class.human_attribute_name(:<%= column.name %>), class: "input-medium" %>
+  <div class="search-controls">
+    <%%= f.text_field :<%= column.name %>_<%= ([:string, :text].include? column.type) ? "like" : "eq" %>, placeholder: model_headers[:<%= column.name %>], class: "input-small", title: model_headers[:<%= column.name %>] %>
+  </div>
   <%- end -%>
   <%- end -%>
-  <%%= f.text_field :created_at_gte, placeholder: model_class.human_attribute_name(:created_at), class: "input-medium datetimepicker" %>
-  ～
-  <%%= f.text_field :created_at_lte, placeholder: model_class.human_attribute_name(:created_at), class: "input-medium datetimepicker" %>
+  <div class="search-controls">
+    <%%= f.text_field :created_at_gte, placeholder: model_headers[:created_at], class: "input-medium datetimepicker", title: model_headers[:created_at] %>
+    ～
+    <%%= f.text_field :created_at_lte, placeholder: model_headers[:created_at], class: "input-medium datetimepicker", title: model_headers[:created_at] %>
+  </div>
   <%%= f.submit t(".search", default: t("helpers.submit.search")) %>
 <%% end %>
 
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%%= sort_link @<%= plural_resource_name %>_search, :id, model_class.human_attribute_name(:id), default_order: :desc %></th>
+      <th><%%= sort_link @<%= plural_resource_name %>_search, :id, model_headers[:id], default_order: :desc %></th>
       <%- columns.each do |column| -%>
       <%- if !(column.name =~ /_id$/) && column.type != :text -%>
-      <th><%%= sort_link @<%= plural_resource_name %>_search, :<%= column.name %>, model_class.human_attribute_name(:<%= column.name %>) %></th>
+      <th><%%= sort_link @<%= plural_resource_name %>_search, :<%= column.name %>, model_headers[:<%= column.name %>] %></th>
       <%- else -%>
-      <th><%%= model_class.human_attribute_name(:<%= column.name %>) %></th>
+      <th><%%= model_headers[:<%= column.name %>] %></th>
       <%- end -%>
       <%- end -%>
-      <th><%%= sort_link @<%= plural_resource_name %>_search, :created_at, model_class.human_attribute_name(:created_at), default_order: :desc %></th>
+      <th><%%= sort_link @<%= plural_resource_name %>_search, :created_at, model_headers[:created_at], default_order: :desc %></th>
       <%% if can? link_action, model_class %>
         <th><%%=t ".actions", default: t("helpers.actions") %></th>
       <%% end %>

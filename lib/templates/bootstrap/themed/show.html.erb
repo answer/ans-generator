@@ -2,6 +2,16 @@
   components = @controller_class_path.map{|m| ":#{m.underscore}"}.join(",").tap{|p| p << ", " if p.present?}
 -%>
 <%%- model_class = @<%= resource_name %>.class -%>
+<%%- model_headers = Hash[[
+  # ヘッダの出力に使用する文字列をここで用意する
+  :id,
+  <%- columns.each do |column| -%>
+  <%- unless column.name.to_sym == :deleted_at -%>
+  :<%= column.name %>,
+  <%- end -%>
+  <%- end -%>
+  :created_at,
+].map{|name| [name,model_class.human_attribute_name(name)]}] -%>
 <div class="page-header">
   <h1><%%=t ".title", default: t("helpers.titles.show", model: model_class.model_name.human,
                                 title: " (id: #{@<%= resource_name %>.id})",
@@ -11,17 +21,22 @@
 <table class="table table-bordered table-striped table-pairs">
   <tbody>
     <tr>
-      <th><%%= model_class.human_attribute_name(:id) %></th>
+      <th><%%= model_headers[:id] %></th>
       <td><%%= @<%= resource_name %>.id %></td>
     </tr>
 <%- columns.each do |column| -%>
     <tr>
-      <th><%%= model_class.human_attribute_name(:<%= column.name %>) %></th>
-      <td><%%= @<%= resource_name %>.<%= column.name %> %></td>
+      <th><%%= model_headers[:<%= column.name %>] %></th>
+      <td><%%=<%= case column.type.to_sym
+  when :datetime
+    "l_short"
+  when :date
+    "l_long"
+end %> @<%= resource_name %>.<%= column.name %> %></td>
     </tr>
 <%- end -%>
     <tr>
-      <th><%%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%%= model_headers[:created_at] %></th>
       <td><%%=l_short @<%= resource_name %>.created_at %></td>
     </tr>
   </tbody>
