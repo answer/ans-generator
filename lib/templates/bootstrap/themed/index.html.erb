@@ -34,7 +34,7 @@
     <%%= f.text_field :id_eq, placeholder: model_headers[:id], class: "input-small", title: model_headers[:id] %>
   </div>
   <%- columns.each do |column| -%>
-  <%- if column.type != :text -%>
+  <%- if column.name.to_sym != :deleted_at && column.type != :text -%>
   <div class="search-controls">
     <%%= f.text_field :<%= column.name %>_<%= ([:string, :text].include? column.type) ? "like" : "eq" %>, placeholder: model_headers[:<%= column.name %>], class: "input-small", title: model_headers[:<%= column.name %>] %>
   </div>
@@ -45,42 +45,55 @@
     ～
     <%%= f.text_field :created_at_lte, placeholder: model_headers[:created_at], class: "input-medium datetimepicker", title: model_headers[:created_at] %>
   </div>
-  <%%= f.submit t(".search", default: t("helpers.submit.search")) %>
+  <div class="search-buttons">
+    <%%= f.submit t(".search", default: t("helpers.submit.search")) %>
+  </div>
 <%% end %>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%%= sort_link @<%= plural_resource_name %>_search, :id, model_headers[:id], default_order: :desc %></th>
-      <%- columns.each do |column| -%>
-      <%- if !(column.name =~ /_id$/) && column.type != :text -%>
-      <th><%%= sort_link @<%= plural_resource_name %>_search, :<%= column.name %>, model_headers[:<%= column.name %>] %></th>
-      <%- else -%>
-      <th><%%= model_headers[:<%= column.name %>] %></th>
-      <%- end -%>
-      <%- end -%>
-      <th><%%= sort_link @<%= plural_resource_name %>_search, :created_at, model_headers[:created_at], default_order: :desc %></th>
-      <%% if can? link_action, model_class %>
-        <th><%%=t ".actions", default: t("helpers.actions") %></th>
-      <%% end %>
-    </tr>
-  </thead>
-  <tbody>
-    <%% @<%= plural_resource_name %>.each do |<%= resource_name %>| %>
+<%% if @items.count == 0 %>
+  <div class="alert alert-info">
+    <%%=t ".not_found", model: model_class.model_name.human,
+         default: t("helpers.messages.not_found", model: model_class.model_name.human, default: "not found") %>
+  </div>
+<%% else %>
+  <table class="table table-striped">
+    <thead>
       <tr>
-        <td><%%= <%= resource_name %>.id %></td>
+        <th><%%= sort_link @<%= plural_resource_name %>_search, :id, model_headers[:id], default_order: :desc %></th>
         <%- columns.each do |column| -%>
-        <td><%%= <%= resource_name %>.<%= column.name %> %></td>
+        <%- unless column.name.to_sym == :deleted_at -%>
+        <%- if !(column.name =~ /_id$/) && column.type != :text -%>
+        <th><%%= sort_link @<%= plural_resource_name %>_search, :<%= column.name %>, model_headers[:<%= column.name %>] %></th>
+        <%- else -%>
+        <th><%%= model_headers[:<%= column.name %>] %></th>
         <%- end -%>
-        <td><%%=l_short <%= resource_name %>.created_at %></td>
-        <td>
-          <%%= link_to_if can?(link_action, <%= resource_name %>), t(".#{link_action}", default: t("helpers.links.#{link_action}")),
-                         [(link_action == "show" ? nil : link_action), <%= components %><%= resource_name %>], class: "btn btn-mini" %>
-        </td>
+        <%- end -%>
+        <%- end -%>
+        <th><%%= sort_link @<%= plural_resource_name %>_search, :created_at, model_headers[:created_at], default_order: :desc %></th>
+        <%% if can? link_action, model_class %>
+          <th><%%=t ".actions", default: t("helpers.actions") %></th>
+        <%% end %>
       </tr>
-    <%% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <%% @<%= plural_resource_name %>.each do |<%= resource_name %>| %>
+        <tr>
+          <td><%%= <%= resource_name %>.id %></td>
+          <%- columns.each do |column| -%>
+          <%- unless column.name.to_sym == :deleted_at -%>
+          <td><%%= <%= resource_name %>.<%= column.name %> %></td>
+          <%- end -%>
+          <%- end -%>
+          <td><%%=l_short <%= resource_name %>.created_at %></td>
+          <td>
+            <%%= link_to_if can?(link_action, <%= resource_name %>), t(".#{link_action}", default: t("helpers.links.#{link_action}")),
+                          [(link_action == "show" ? nil : link_action), <%= components %><%= resource_name %>], class: "btn btn-mini" %>
+          </td>
+        </tr>
+      <%% end %>
+    </tbody>
+  </table>
+<%% end %>
 <div class="pagination pagination-centered">
   <%%= paginate @<%= plural_resource_name %>, theme: "manage" %>
 </div>
