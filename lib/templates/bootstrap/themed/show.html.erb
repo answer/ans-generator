@@ -18,29 +18,25 @@
                                 default: "#{model_class.model_name.human}") %></h1>
 </div>
 
-<table class="table table-bordered table-striped table-pairs">
-  <tbody>
-    <tr>
-      <th><%%= model_headers[:id] %></th>
-      <td><%%= @<%= resource_name %>.id %></td>
-    </tr>
-<%- columns.each do |column| -%>
-    <tr>
-      <th><%%= model_headers[:<%= column.name %>] %></th>
-      <td><%%=<%= case column.type.to_sym
-  when :datetime
-    "l_short"
-  when :date
-    "l_long"
-end %> @<%= resource_name %>.<%= column.name %> %></td>
-    </tr>
-<%- end -%>
-    <tr>
-      <th><%%= model_headers[:created_at] %></th>
-      <td><%%=l_short @<%= resource_name %>.created_at %></td>
-    </tr>
-  </tbody>
-</table>
+<dl class="dl-horizontal">
+  <dt><%%= model_headers[:id] %></dt>
+  <dd>: <%%= @<%= resource_name %>.id %></dd>
+
+  <%- columns.each do |column| -%>
+  <%- unless column.name.to_sym == :deleted_at -%>
+  <dt><%%= model_headers[:<%= column.name %>] %></dt>
+  <dd>: <%%=<%= case column.type.to_sym
+                  when :datetime
+                    "l_short"
+                  when :date
+                    "l_long"
+                end %> @<%= resource_name %>.<%= column.name %> %></dd>
+
+  <%- end -%>
+  <%- end -%>
+  <dt><%%= model_headers[:created_at] %></dt>
+  <dd>: <%%=l_short @<%= resource_name %>.created_at %></dd>
+</dl>
 
 <div class="form-actions">
   <div class="row-fluid">
