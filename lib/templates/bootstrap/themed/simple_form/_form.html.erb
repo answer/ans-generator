@@ -3,7 +3,9 @@
 -%>
 <%%= simple_form_for [<%= components %>@<%= resource_name %>], html: { class: "form-horizontal" } do |f| %>
   <%- columns.each do |column| -%>
+  <%- unless column.name.to_sym == :deleted_at -%>
   <%%= f.input :<%= column.name %> %>
+  <%- end -%>
   <%- end -%>
   <%- if ::SimpleForm::FormBuilder.instance_methods.include?(:wrapped_button) -%>
   <%%= f.button :wrapped, cancel: <%= controller_routing_path %>_path %>
