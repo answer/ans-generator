@@ -50,7 +50,7 @@
   </div>
 <%% end %>
 
-<%% if @items.count == 0 %>
+<%% if @<%= plural_resource_name %>.count == 0 %>
   <div class="alert alert-info">
     <%%=t ".not_found", model: model_class.model_name.human,
          default: t("helpers.messages.not_found", model: model_class.model_name.human, default: "not found") %>
