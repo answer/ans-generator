@@ -26,11 +26,11 @@
   <%- unless column.name.to_sym == :deleted_at -%>
   <dt><%%= model_headers[:<%= column.name %>] %></dt>
   <dd>: <%%=<%= case column.type.to_sym
-                when :datetime
-                  "l_short"
-                when :date
-                  "l_long"
-              end %> @<%= resource_name %>.<%= column.name %> %></dd>
+                  when :datetime
+                    "l_short"
+                  when :date
+                    "l_long"
+                end %> @<%= resource_name %>.<%= column.name %> %></dd>
 
   <%- end -%>
   <%- end -%>
