@@ -1,10 +1,12 @@
 <%
-fixture = case
-  when defined? Fabricate
-    "Fabricate.attributes_for"
-  when defined? FactoryGirl
-    "FactoryGirl.attributes_for"
-end
+  fixture = proc{|opts|
+    case
+    when defined? Fabricate
+      "#{class_name}.#{opts[:persist] ? "create" : "new"} Fabricate.attributes_for"
+    when defined? FactoryGirl
+      "FactoryGirl.#{opts[:persist] ? "create" : "build"}"
+    end
+  }
 -%>
 # -*- coding: utf-8 -*-
 
@@ -66,7 +68,7 @@ end) -%>
 end
 
 describe <%= class_name %>, "invalid values" do
-  #subject{<%= class_name %>.new <%= fixture %>(:<%= plural_name.singularize %>)}
+  #subject{<%= fixture.call(persist: false) %>(:<%= plural_name.singularize %>)}
 
   # データベースに保存できない値を渡す
   #it{should_not success_persistance_of(:name).values(["a"*256])}  # varchar(255)
@@ -97,7 +99,8 @@ end
 
 #describe <%= class_name %>, "summary" do
 #  subject{item.summary}
-#  let(:item){<%= class_name %>.create <%= fixture %>(:<%= plural_name.singularize %>,
+#  let(:item){<%= fixture.call(persist: true) %>(
+#    :<%= plural_name.singularize %>,
 #    title: title,
 #    body: body,
 #  )}
