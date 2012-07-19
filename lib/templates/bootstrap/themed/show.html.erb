@@ -44,12 +44,12 @@
       <%%= link_to t(".edit", default: t("helpers.links.edit")),
                     [:edit, <%= components %>@<%= resource_name %>], class: "btn" %>
     </div>
-    <div class="span2" style="text-align: right">
+    <div class="span2">
       <%%= link_to t(".destroy", default: t("helpers.links.destroy")),
                     [<%= components %>@<%= resource_name %>],
                     method: "delete",
                     confirm: t(".confirm", default: t("helpers.links.confirm", default: "Are you sure?")),
-                    class: "btn btn-danger" %>
+                    class: "btn btn-danger pull-right" %>
     </div>
   </div>
 </div>
