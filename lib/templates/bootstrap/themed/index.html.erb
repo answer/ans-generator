@@ -19,11 +19,9 @@
       <h1><%%=t ".title", default: model_class.model_name.human %></h1>
     </div>
     <div class="span1">
-      <div style="text-align: right;">
-        <%%= link_to t(".new", default: t("helpers.links.new")),
-                      [:new, <%= components %>:<%= resource_name %>],
-                      class: "btn btn-primary" %>
-      </div>
+      <%%= link_to t(".new", default: t("helpers.links.new")),
+                    [:new, <%= components %>:<%= resource_name %>],
+                    class: "btn btn-primary pull-right" %>
     </div>
   </div>
 
