@@ -85,10 +85,12 @@
           <%- end -%>
           <%- end -%>
           <td><%%=l_short <%= resource_name %>.created_at %></td>
-          <td>
-            <%%= link_to_if can?(link_action, <%= resource_name %>), t(".#{link_action}", default: t("helpers.links.#{link_action}")),
+          <%% if can? link_action, model_class %>
+            <td>
+              <%%= link_to t(".#{link_action}", default: t("helpers.links.#{link_action}")),
                           [(link_action == "show" ? nil : link_action), <%= components %><%= resource_name %>], class: "btn btn-mini" %>
-          </td>
+            </td>
+          <%% end %>
         </tr>
       <%% end %>
     </tbody>
