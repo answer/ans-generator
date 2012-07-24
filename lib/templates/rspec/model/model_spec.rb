@@ -42,12 +42,12 @@ describe <%= class_name %>, "mass_assignments" do
   #it{should_not allow_mass_assignment_of(:column)}       # できない
   #it{should allow_mass_assignment_of(:column).as(:role)} # as: role ならできる
 <% for attribute in attributes -%>
-<% if (case attribute.type
-when :belongs_to,:resources then false
+<% if (column = case attribute.type
+when :belongs_to,:resources then "#{attribute.name}_id"
 else
-  !([:deleted_at].include? attribute.name.to_sym)
+  ([:deleted_at].include? attribute.name.to_sym) ? nil : attribute.name
 end) -%>
-  it{should allow_mass_assignment_of(:<%= attribute.name %>)}
+  it{should<% if column =~ /_id$/ %>_not<% end %> allow_mass_assignment_of(:<%= column %>)}
 <% end -%>
 <% end -%>
 end
