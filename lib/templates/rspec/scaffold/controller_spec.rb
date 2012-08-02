@@ -37,19 +37,13 @@ describe <%= controller_class_name %>Controller do
 
 <% unless options[:singleton] -%>
   describe "GET index" do
-    subject{
-      get :index
-      response
-    }
+    subject{get :index}
     it{subject.should render_template :index}
   end
 
 <% end -%>
   describe "GET show" do
-    subject{
-      get :show, id: item_id
-      response
-    }
+    subject{get :show, id: item_id}
     let(:item_id){item.id}
     let(:item){<%= fixture %>(:<%= singular_instance_name %>)}
 
@@ -57,18 +51,12 @@ describe <%= controller_class_name %>Controller do
   end
 
   describe "GET new" do
-    subject{
-      get :new
-      response
-    }
+    subject{get :new}
     it{subject.should render_template :new}
   end
 
   describe "GET edit" do
-    subject{
-      get :edit, id: item_id
-      response
-    }
+    subject{get :edit, id: item_id}
     let(:item_id){item.id}
     let(:item){<%= fixture %>(:<%= singular_instance_name %>)}
 
@@ -76,10 +64,7 @@ describe <%= controller_class_name %>Controller do
   end
 
   describe "POST create" do
-    subject{
-      post :create, <%= singular_instance_name %>: create_params
-      response
-    }
+    subject{post :create, <%= singular_instance_name %>: create_params}
     context "保存可能なパラメータを指定した場合" do
       let(:create_params){valid_params}
       it{subject.should redirect_to [<%= controller_class_path.map{|m| ":#{m.underscore}"}.join(",").tap{|p| p << ", " if p.present?} %><%= model_name %>.last]}
@@ -91,10 +76,7 @@ describe <%= controller_class_name %>Controller do
   end
 
   describe "PUT update" do
-    subject{
-      put :update, id: item_id, <%= singular_instance_name %>: update_params
-      response
-    }
+    subject{put :update, id: item_id, <%= singular_instance_name %>: update_params}
     let(:item_id){item.id}
     let(:item){<%= fixture %>(:<%= singular_instance_name %>)}
 
@@ -109,10 +91,7 @@ describe <%= controller_class_name %>Controller do
   end
 
   describe "DELETE destroy" do
-    subject{
-      delete :destroy, id: item_id
-      response
-    }
+    subject{delete :destroy, id: item_id}
     let(:item_id){item.id}
     let(:item){<%= fixture %>(:<%= singular_instance_name %>)}
 
