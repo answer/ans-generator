@@ -19,8 +19,8 @@
       <div class="row-fluid">
         <div class="span12">
           <%%= f.button :submit, class: "btn-primary" %>
-          <%%= link_to t(".cancel", default: t("helpers.links.cancel")),
-                      [<%= components %>@<%= resource_name %>], class: "btn" %>
+          <%%= link_to t(".back", default: t("helpers.links.back")),
+                      [<%= components %>:<%= plural_resource_name %>], class: "btn" %>
           <%% if can? :destroy, @<%= resource_name %> %>
             <%%= link_to t(".destroy", default: t("helpers.links.destroy")),
                         [<%= components %>@<%= resource_name %>],
