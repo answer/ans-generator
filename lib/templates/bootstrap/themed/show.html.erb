@@ -44,6 +44,8 @@
       <div class="span12">
         <%%= link_to t(".edit", default: t("helpers.links.edit")),
                     [:edit, <%= components %>@<%= resource_name %>], class: "btn" %>
+        <%%= link_to t(".back", default: t("helpers.links.back")),
+                    [<%= components %>:<%= plural_resource_name %>], class: "btn" %>
         <%% if can? :destroy, @<%= resource_name %> %>
           <%%= link_to t(".destroy", default: t("helpers.links.destroy")),
                       [<%= components %>@<%= resource_name %>],
