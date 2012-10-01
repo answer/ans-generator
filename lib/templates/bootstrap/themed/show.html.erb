@@ -1,6 +1,10 @@
 <%-
   components = @controller_class_path.map{|m| ":#{m.underscore}"}.join(",").tap{|p| p << ", " if p.present?}
 -%>
+<%% title = t ".title", default: t("helpers.titles.show", model: model_class.model_name.human,
+                                  title: " (id: #{@<%= resource_name %>.id})",
+                                  default: "#{model_class.model_name.human}") %>
+<%%= content_for :title do %><%%= title %><%% end %>
 <%%- model_class = @<%= resource_name %>.class -%>
 <%%- model_headers = Hash[[
   # ヘッダの出力に使用する文字列をここで用意する
@@ -13,9 +17,7 @@
   :created_at,
 ].map{|name| [name,model_class.human_attribute_name(name)]}] -%>
 <div class="page-header">
-  <h1><%%=t ".title", default: t("helpers.titles.show", model: model_class.model_name.human,
-                                title: " (id: #{@<%= resource_name %>.id})",
-                                default: "#{model_class.model_name.human}") %></h1>
+  <h1><%%= title %></h1>
 </div>
 
 <dl class="dl-horizontal">
