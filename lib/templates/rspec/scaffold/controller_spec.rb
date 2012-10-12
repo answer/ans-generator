@@ -38,29 +38,29 @@ describe <%= controller_class_name %>Controller do
 <% unless options[:singleton] -%>
   describe "GET index" do
     subject{get :index}
-    it{subject.should render_template :index}
+    it{should render_template :index}
   end
 
 <% end -%>
   describe "GET show" do
-    subject{get :show, id: item_id}
-    let(:item_id){item.id}
-    let(:item){<%= fixture %>(:<%= singular_instance_name %>)}
+    subject{get :show, id: id}
+    let(:id){<%= singular_instance_name %>.id}
+    let(:<%= singular_instance_name %>){<%= fixture %>(:<%= singular_instance_name %>)}
 
-    it{subject.should render_template :show}
+    it{should render_template :show}
   end
 
   describe "GET new" do
     subject{get :new}
-    it{subject.should render_template :new}
+    it{should render_template :new}
   end
 
   describe "GET edit" do
-    subject{get :edit, id: item_id}
-    let(:item_id){item.id}
-    let(:item){<%= fixture %>(:<%= singular_instance_name %>)}
+    subject{get :edit, id: id}
+    let(:id){<%= singular_instance_name %>.id}
+    let(:<%= singular_instance_name %>){<%= fixture %>(:<%= singular_instance_name %>)}
 
-    it{subject.should render_template :edit}
+    it{should render_template :edit}
   end
 
   describe "POST create" do
@@ -71,31 +71,31 @@ describe <%= controller_class_name %>Controller do
     end
     context "保存不可能なパラメータを指定した場合" do
       let(:create_params){invalid_params}
-      it{subject.should render_template :new}
+      it{should render_template :new}
     end
   end
 
   describe "PUT update" do
-    subject{put :update, id: item_id, <%= singular_instance_name %>: update_params}
-    let(:item_id){item.id}
-    let(:item){<%= fixture %>(:<%= singular_instance_name %>)}
+    subject{put :update, id: id, <%= singular_instance_name %>: update_params}
+    let(:id){<%= singular_instance_name %>.id}
+    let(:<%= singular_instance_name %>){<%= fixture %>(:<%= singular_instance_name %>)}
 
     context "保存可能なパラメータを指定した場合" do
       let(:update_params){valid_params}
-      it{subject.should redirect_to [<%= controller_class_path.map{|m| ":#{m.underscore}"}.join(",").tap{|p| p << ", " if p.present?} %>item]}
+      it{should redirect_to [<%= controller_class_path.map{|m| ":#{m.underscore}"}.join(",").tap{|p| p << ", " if p.present?} %><%= singular_instance_name %>]}
     end
     context "保存不可能なパラメータを指定した場合" do
       let(:update_params){invalid_params}
-      it{subject.should render_template :edit}
+      it{should render_template :edit}
     end
   end
 
   describe "DELETE destroy" do
-    subject{delete :destroy, id: item_id}
-    let(:item_id){item.id}
-    let(:item){<%= fixture %>(:<%= singular_instance_name %>)}
+    subject{delete :destroy, id: id}
+    let(:id){<%= singular_instance_name %>.id}
+    let(:<%= singular_instance_name %>){<%= fixture %>(:<%= singular_instance_name %>)}
 
-    it{subject.should redirect_to <%= index_helper %>_url}
+    it{should redirect_to <%= index_helper %>_url}
   end
 
 end

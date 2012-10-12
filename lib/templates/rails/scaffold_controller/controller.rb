@@ -15,7 +15,7 @@
 class <%= controller_class_name %>Controller < <%= controller_class_path.map{|m| m.camelize}.join("::") %>::ApplicationController
   authorize_resource
 
-  before_filter :set_item, only: [:show, :edit, :update, :destroy]
+  before_filter :set_<%= singular_instance_name %>, only: [:show, :edit, :update, :destroy]
   before_filter :set_meta_sort, only: [:index]
 
   def index
@@ -55,7 +55,7 @@ class <%= controller_class_name %>Controller < <%= controller_class_path.map{|m|
 
   private
 
-  def set_item
+  def set_<%= singular_instance_name %>
     @<%= singular_instance_name %> = <%= orm_class.find(model_name, "params[:id]") %>
   end
 
