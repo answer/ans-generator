@@ -22,10 +22,7 @@ require 'spec_helper'
 
 <% output_attributes = attributes.reject{|attribute| [:datetime, :timestamp, :time, :date].index(attribute.type) } -%>
 describe "<%= controller_file_path %>/show.html.<%= options[:template_engine] %>", type: :view do
-  subject{
-    render
-    rendered
-  }
+  subject{render;rendered}
   before do
     # ここでログインの処理を記述する
     <%= controller_class_path.map{|m| m.underscore}.join("_").tap{|p| p << "_" if p.present?} %>login
